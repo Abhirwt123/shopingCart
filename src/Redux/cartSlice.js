@@ -10,15 +10,22 @@ const cartSlice = createSlice({
         removeItem: (state, action) => {
             return state.filter((product) => product.id !== action.payload)
         },
-        addProductQuantity: (state, action) => {
-            state = state.map((item) => {
-                if (item.id === action.payload) {
-                    return { ...item, quantity: item.quantity + 1 }
-                } return item;
-            })
+        increaseProductQuantity: (state, action) => {
+            const productId = action.payload;
+            const productToUpdate = state.find((product) => product.id === productId);
+            if (productToUpdate) {
+                productToUpdate.quantity = (productToUpdate.quantity || 0) + 1;
+            }
+        },
+        decreaseProductQuantity: (state, action) => {
+            const productId = action.payload;
+            const productToUpdate = state.find((product) => product.id === productId);
+            if (productToUpdate && productToUpdate.quantity > 0) {
+                productToUpdate.quantity -= 1;
+            }
         }
     }
 })
 
-export const { addItem, removeItem, addProductQuantity } = cartSlice.actions;
+export const { addItem, removeItem, increaseProductQuantity,decreaseProductQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
